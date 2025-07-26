@@ -17,4 +17,5 @@ router.post("/", authMiddleware, createProduct);
 router.get("/",getAllProduct);
 router.delete("/:id", authMiddleware, deleteProduct);
 router.delete("/deleteImages/:id", authMiddleware, deleteImages);
+
 module.exports = router;
