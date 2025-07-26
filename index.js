@@ -19,7 +19,13 @@ const brandRouter=require('./routes/brandRoutes')
 const enquiryRouter=require('./routes/enqRoutes')
 dbConnect()
 app.use(morgan('dev'))
-app.use(cors())
+// app.use(cors())
+app.use(cors({
+  origin: 'https://pet-frontend-phi.vercel.app/', // 比如 'https://lovepet-front.onrender.com'
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(cookieParser())
