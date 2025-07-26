@@ -32,7 +32,8 @@ app.use(cookieParser())
 app.use('/api/user',authRouter)
 app.use("/api/product", productRouter);
 // app.use("/api/blog",blogRouter );
-app.use("/api/productCategory", productCategoryRouter);
+// app.use("/api/productCategory", productCategoryRouter);
+app.use("/api/categories", productCategoryRouter);
 // app.use("/api/blogCategory", blogCategoryRouter);
 app.use("/api/brand",brandRouter );
 // app.use("/api/color",colorRouter );
