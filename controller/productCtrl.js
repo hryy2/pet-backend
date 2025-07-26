@@ -52,76 +52,10 @@ const getaProduct = asyncHandler(async (req, res) => {
   }
 });
 
-const getAllProduct = asyncHandler(async (req, res) => {
-  try {
-    const product = await Product.find({}); // 无过滤条件
-    const totalPages = 1; // 简单写死
-
-    res.status(200).json({
-      success: true,
-      data: {
-        product,
-        totalPages,
-      },
-    });
-  } catch (error) {
-    res.status(500);
-    throw new Error("Server error");
-  }
-});
-
-
- 
 // const getAllProduct = asyncHandler(async (req, res) => {
 //   try {
-//     const queryObj = {};
-    
-//     // Handle filters with operators like gte/lte
-//     if (req.query['totalRatings[gte]']) {
-//       queryObj.totalRatings = { $gte: parseFloat(req.query['totalRatings[gte]']) };
-//     }
-
-//     if (req.query['discount[gte]']) {
-//       queryObj.discount = { $gte: parseFloat(req.query['discount[gte]']) };
-//     }
-
-//     if (req.query['price[gte]'] || req.query['price[lte]']) {
-//       queryObj.price = {};
-//       if (req.query['price[gte]']) {
-//         queryObj.price.$gte = parseFloat(req.query['price[gte]']);
-//       }
-//       if (req.query['price[lte]']) {
-//         queryObj.price.$lte = parseFloat(req.query['price[lte]']);
-//       }
-//     }
-
-//     // Color (handled as array in frontend)
-//     if (req.query.color) {
-//       // query.color can be either a string or an array
-//       const colors = Array.isArray(req.query.color) ? req.query.color : [req.query.color];
-//       queryObj.color = { $in: colors };
-//     }
-
-//     let query = Product.find(queryObj);
-
-//     // Sorting
-//     if (req.query.sort) {
-//       const sortBy = req.query.sort.split(',').join(' ');
-//       query = query.sort(sortBy);
-//     } else {
-//       query = query.sort('-createdAt');
-//     }
-
-//     // Pagination
-//     const page = parseInt(req.query.page) || 1;
-//     const limit = 8;
-//     const skip = (page - 1) * limit;
-
-//     query = query.skip(skip).limit(limit);
-
-//     const product = await query;
-//     const totalProducts = await Product.countDocuments(queryObj);
-//     const totalPages = Math.ceil(totalProducts / limit);
+//     const product = await Product.find({}); // 无过滤条件
+//     const totalPages = 1; // 简单写死
 
 //     res.status(200).json({
 //       success: true,
@@ -135,6 +69,72 @@ const getAllProduct = asyncHandler(async (req, res) => {
 //     throw new Error("Server error");
 //   }
 // });
+
+
+ 
+const getAllProduct = asyncHandler(async (req, res) => {
+  try {
+    const queryObj = {};
+    
+    // Handle filters with operators like gte/lte
+    if (req.query['totalRatings[gte]']) {
+      queryObj.totalRatings = { $gte: parseFloat(req.query['totalRatings[gte]']) };
+    }
+
+    if (req.query['discount[gte]']) {
+      queryObj.discount = { $gte: parseFloat(req.query['discount[gte]']) };
+    }
+
+    if (req.query['price[gte]'] || req.query['price[lte]']) {
+      queryObj.price = {};
+      if (req.query['price[gte]']) {
+        queryObj.price.$gte = parseFloat(req.query['price[gte]']);
+      }
+      if (req.query['price[lte]']) {
+        queryObj.price.$lte = parseFloat(req.query['price[lte]']);
+      }
+    }
+
+    // Color (handled as array in frontend)
+    if (req.query.color) {
+      // query.color can be either a string or an array
+      const colors = Array.isArray(req.query.color) ? req.query.color : [req.query.color];
+      queryObj.color = { $in: colors };
+    }
+
+    let query = Product.find(queryObj);
+
+    // Sorting
+    if (req.query.sort) {
+      const sortBy = req.query.sort.split(',').join(' ');
+      query = query.sort(sortBy);
+    } else {
+      query = query.sort('-createdAt');
+    }
+
+    // Pagination
+    const page = parseInt(req.query.page) || 1;
+    const limit = 8;
+    const skip = (page - 1) * limit;
+
+    query = query.skip(skip).limit(limit);
+
+    const product = await query;
+    const totalProducts = await Product.countDocuments(queryObj);
+    const totalPages = Math.ceil(totalProducts / limit);
+
+    res.status(200).json({
+      success: true,
+      data: {
+        product,
+        totalPages,
+      },
+    });
+  } catch (error) {
+    res.status(500);
+    throw new Error("Server error");
+  }
+});
 
 
 // controllers/productCtrl.js

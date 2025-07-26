@@ -6,6 +6,7 @@ const dbConnect = async () => {
       useNewUrlParser: true,
     });
     console.log("MongoDB connected successfully 😊");
+    console.log("Database Name:", conn.connection.name);
   } catch (err) {
     console.error(err);
   }
